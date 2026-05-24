@@ -54,11 +54,39 @@ After writing, verify every line-number reference by reading the actual source f
 mkdir <project>-analysis && cd <project>-analysis
 git init
 git submodule add <upstream-repo-url> <submodule-dir>
-mkdir docs scripts
+mkdir docs scripts .github/workflows
 
 # Initialize git identity
 git config user.name "..." && git config user.email "..."
 ```
+
+**Document naming convention**:
+
+```
+docs/
+├── index.md                      # Pages homepage (nav_order: 1)
+├── _config.yml                   # Jekyll config (just-the-docs theme)
+├── 01-<architecture>.md          # nav_order: 2 — broadest view
+├── 02-<code-structure>.md        # nav_order: 3
+├── 03-<initialization>.md        # nav_order: 4
+├── 04-<model-loading>.md         # nav_order: 5
+├── 05-<runtime-flow>.md          # nav_order: 6
+├── 06-<op-registration>.md       # nav_order: 7
+├── 07-<key-algorithm-1>.md       # nav_order: 8
+└── 08-<key-algorithm-2>.md       # nav_order: 9
+```
+
+Rules:
+- `NN-<slug>.md`  — numeric prefix ensures file system order. Jekyll sidebar uses `nav_order` frontmatter.
+- `index.md` always has `nav_order: 1` and serves as the Pages landing page.
+- Each doc must have Jekyll frontmatter:
+  ```yaml
+  ---
+  title: <Short Title>
+  nav_order: <N>
+  ---
+  ```
+- Order must be from general to specific — each doc builds on concepts from previous ones.
 
 ### Phase 2: Research
 
