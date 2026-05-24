@@ -1,0 +1,63 @@
+name: Deploy Jekyll site
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rewrite source links for Pages
+        run: |
+          # Auto-detect submodule commit
+          COMMIT=$(git ls-tree HEAD <SUBMODULE_DIR> | awk '{print $3}')
+          if [ -z "$COMMIT" ]; then
+            echo "::error::Could not read submodule commit"
+            exit 1
+          fi
+          BASE="https://github.com/<UPSTREAM_ORG>/<UPSTREAM_REPO>/blob/${COMMIT}"
+          cd docs
+          for f in 0*.md; do
+            sed -i \
+              -e "s|](../<SUBMODULE_DIR>/<PKG_DIR>/|](${BASE}/<PKG_DIR>/|g" \
+              -e "s|](../csrc/|](${BASE}/csrc/|g" \
+              -e "s|](../setup\.py|](${BASE}/setup.py|g" \
+              -e "s|](../CMakeLists\.txt|](${BASE}/CMakeLists.txt|g" \
+              -e "s|](../pyproject\.toml|](${BASE}/pyproject.toml|g" \
+              "$f"
+          done
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: docs
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
