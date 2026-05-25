@@ -78,7 +78,7 @@ docs/
 
 Rules:
 - `NN-<slug>.md`  — numeric prefix ensures file system order. Jekyll sidebar uses `nav_order` frontmatter.
-- `index.md` always has `nav_order: 1` and serves as the Pages landing page.
+- `index.md` always has `nav_order: 1` and serves as the Pages landing page. **This file is mandatory** — without it, Jekyll cannot generate `index.html` and the site will return 404 at the root URL.
 - Each doc must have Jekyll frontmatter:
   ```yaml
   ---
@@ -130,6 +130,8 @@ For each document, follow this structure:
 [name](https://github.com/upstream/repo/blob/<commit>/vllm/path/to/file.py#L123)
 ```
 
+> The sed pattern must match your document's link format. If `docs/` is at repo root (sibling to the submodule), links look like `](submodule/...` rather than `](../submodule/...`. The sed expression needs to match whatever prefix your docs use.
+
 ### Phase 4: Infrastructure
 
 **GitHub Pages workflow** (`.github/workflows/pages.yml`):
@@ -154,6 +156,8 @@ For each document, follow this structure:
     source: docs
 ```
 
+> **Note on sed glob**: Use `[0-9]*.md` not `0*.md` — if you have 10+ documents, `0*.md` won't match `10-*.md` etc. The wider pattern `[0-9]*.md` catches all numbered docs.
+
 **Jekyll config** (`docs/_config.yml`):
 
 ```yaml
@@ -169,6 +173,26 @@ Each doc needs frontmatter for sidebar ordering:
 title: Architecture Overview
 nav_order: 2
 ---
+```
+
+### Phase 4b: Troubleshooting Infrastructure
+
+**First-time Pages deployment may fail**. If the Pages site has never been deployed before, `actions/configure-pages@v5` can fail with:
+
+```
+Error: Get Pages site failed. Not Found
+```
+
+This happens because the Pages site metadata doesn't exist yet. Solution: after the workflow fails, manually re-run it — the second attempt will succeed because the initial failure still registered the site configuration. You can also pre-enable Pages via API:
+
+```bash
+gh api repos/<owner>/<repo>/pages -X POST -f "build_type=workflow"
+```
+
+**Custom git hooks can interfere**. If your global `.gitconfig` has `core.hookspath` pointing to custom hooks, commands like `git rev-parse --show-toplevel` may return the wrong repository. Symptoms: `git log` shows commits from a different repo, `git remote -v` shows the wrong origin. Fix: use explicit env vars for all git operations:
+
+```bash
+export GIT_DIR=/path/to/.git GIT_WORK_TREE=/path/to/repo
 ```
 
 ### Phase 5: Fact-Checking
