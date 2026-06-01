@@ -238,6 +238,7 @@ Write a blog post or announcement explaining:
 **Surfacing the new site in a landing page / index is a MANUAL step — it is not automatic.** Each analysis repo's CI only builds and deploys *that* repo's own GitHub Pages site; nothing cross-links the projects for you. If you collect your analyses under one entry point (e.g. a personal blog), add the new site there by hand after it deploys:
 
 - **Chirpy blog (jekyll-theme-chirpy)**: add a sidebar tab at `_tabs/<name>.md` in the blog repo (e.g. a "Code Analysis" tab) with frontmatter `icon` + `order` + `title`, listing each project with a one-line description and a root-relative link to its reading site (`/<repo>/`). Lower `order` = higher in the sidebar; bump neighboring tabs' `order` to position it. Root-relative links work on both `*.github.io` and a custom domain. This lives in the blog repo, so it needs its own commit/push and triggers the blog's deploy — separate from the analysis repo.
+  - Helper: `scripts/add-to-blog-list.sh [--dry-run] <reading-path> <display-name> <description>` builds the list line, inserts it alphabetically (idempotent), and commits it to the blog repo via `gh`. It scaffolds the tab if missing. Override `BLOG_REPO`/`TAB_PATH`/`BRANCH` via env. Run `--dry-run` first to preview.
 - **Keep the project list in sync** in three places when you add an analysis: this skill's README + SKILL.md "Reference" list, and the blog landing page/tab.
 
 ## Quality Standards
