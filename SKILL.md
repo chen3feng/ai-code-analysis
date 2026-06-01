@@ -265,4 +265,9 @@ Write a blog post or announcement explaining:
 
 ## Reference
 
-See [chen3feng/vllm-analysis](https://github.com/chen3feng/vllm-analysis) for a complete example using this methodology.
+Analysis projects built with this methodology (alphabetical):
+
+- [aeron-analysis](https://github.com/chen3feng/aeron-analysis) — Aeron: a high-performance, low-latency messaging transport for streaming data over UDP and IPC.
+- [ninja-analysis](https://github.com/chen3feng/ninja-analysis) — Ninja: a small build system built with a singular focus on speed.
+- [upb-analysis](https://github.com/chen3feng/upb-analysis) — upb: a small, fast C implementation of Protocol Buffers.
+- [vllm-analysis](https://github.com/chen3feng/vllm-analysis) — vLLM: a high-throughput, memory-efficient inference and serving engine for LLMs.

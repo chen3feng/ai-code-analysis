@@ -29,9 +29,14 @@ A reusable **skill** and **toolkit** for using AI agents (Claude Code, etc.) to 
 4. Start with the architecture overview, then work through each doc
 5. Fact-check before publishing
 
-## Example
+## Examples
 
-[vllm-analysis](https://github.com/chen3feng/vllm-analysis) — 8 documents analyzing vLLM internals, from architecture overview to CUDA kernel walkthroughs. Includes GitHub Pages with search and navigation sidebar.
+Analysis projects built with this methodology (alphabetical):
+
+- [aeron-analysis](https://github.com/chen3feng/aeron-analysis) — Aeron: a high-performance, low-latency messaging transport for streaming data over UDP and IPC.
+- [ninja-analysis](https://github.com/chen3feng/ninja-analysis) — Ninja: a small build system built with a singular focus on speed.
+- [upb-analysis](https://github.com/chen3feng/upb-analysis) — upb: a small, fast C implementation of Protocol Buffers.
+- [vllm-analysis](https://github.com/chen3feng/vllm-analysis) — vLLM: a high-throughput, memory-efficient inference and serving engine for LLMs.
 
 ## License
 
