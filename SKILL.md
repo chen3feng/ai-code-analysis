@@ -181,6 +181,13 @@ nav_order: 2
 ---
 ```
 
+**Visitor counter (optional)**. just-the-docs injects `_includes/head_custom.html` into every `<head>` and `_includes/footer_custom.html` into every page footer. Use these for a [GoatCounter](https://www.goatcounter.com) visitor counter (free, privacy-friendly, no cookies):
+
+- Use **one global GoatCounter site code across all your analysis projects** — a single free account/site is enough. GoatCounter counts by page path, so `/<repo>/...` paths keep each project distinguishable inside the one dashboard, while you still get a global total. The same path served from `*.github.io` and a custom domain aggregates together (counted by path, not host).
+- `head_custom.html` holds the tracking `<script data-goatcounter="https://<CODE>.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>`.
+- `footer_custom.html` optionally shows a visible total via `<img src="https://<CODE>.goatcounter.com/counter/TOTAL.svg" onerror="...hide...">` — gate it behind an `onerror` that hides the element so an unregistered/disabled counter never leaves a broken image. The visible counter requires enabling the public visitor counter in GoatCounter Settings.
+- The external `count.js` is intentionally loaded without Subresource Integrity (GoatCounter updates it); ignore SRI linter warnings on that line.
+
 ### Phase 4b: Troubleshooting Infrastructure
 
 **First-time Pages deployment may fail**. If the Pages site has never been deployed before, `actions/configure-pages@v5` can fail with:
