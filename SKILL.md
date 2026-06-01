@@ -23,11 +23,14 @@ Analyze large, complex codebases and produce a structured **documentation set** 
 ### 1. Start from the reader, not the code
 
 Each document answers one question:
-- "What is this project and why does it exist?" → Architecture overview
+- "What is this project, why does it exist, and where is it used?" → Project overview & background
+- "What are the layers and how do they connect?" → Architecture overview
 - "How is the code organized?" → Code structure
 - "What happens during startup?" → Initialization flow
 - "What happens when processing a request?" → Runtime flow
 - "How does the key innovation work at the code level?" → Deep dive
+
+**Always lead with a project overview / background doc.** Before any architecture or code, doc 01 should orient a newcomer: what the project is, the problem it solves, why it exists, who uses it, how it compares to alternatives, and the core ideas the rest of the docs will unpack. This is prose-heavy and light on source links — its job is to build the mental model and motivation that makes the deep-dive chapters land. Do not fold "what is this project" into the architecture doc; give background its own chapter.
 
 ### 2. From general to specific
 
@@ -66,18 +69,20 @@ git config user.name "..." && git config user.email "..."
 docs/
 ├── index.md                      # Pages homepage (nav_order: 1)
 ├── _config.yml                   # Jekyll config (just-the-docs theme)
-├── 01-<architecture>.md          # nav_order: 2 — broadest view
-├── 02-<code-structure>.md        # nav_order: 3
-├── 03-<initialization>.md        # nav_order: 4
-├── 04-<model-loading>.md         # nav_order: 5
-├── 05-<runtime-flow>.md          # nav_order: 6
-├── 06-<op-registration>.md       # nav_order: 7
-├── 07-<key-algorithm-1>.md       # nav_order: 8
-└── 08-<key-algorithm-2>.md       # nav_order: 9
+├── 01-<project-overview>.md      # nav_order: 2 — what it is, why it exists, where it's used
+├── 02-<architecture>.md          # nav_order: 3 — broadest technical view
+├── 03-<code-structure>.md        # nav_order: 4
+├── 04-<initialization>.md        # nav_order: 5
+├── 05-<model-loading>.md         # nav_order: 6
+├── 06-<runtime-flow>.md          # nav_order: 7
+├── 07-<op-registration>.md       # nav_order: 8
+├── 08-<key-algorithm-1>.md       # nav_order: 9
+└── 09-<key-algorithm-2>.md       # nav_order: 10
 ```
 
 Rules:
 - `NN-<slug>.md`  — numeric prefix ensures file system order. Jekyll sidebar uses `nav_order` frontmatter.
+- **Doc 01 is always a project overview / background chapter** (see Core Principle 1). Architecture and code structure follow it, not lead.
 - `index.md` always has `nav_order: 1` and serves as the Pages landing page. **This file is mandatory** — without it, Jekyll cannot generate `index.html` and the site will return 404 at the root URL.
 - Each doc must have Jekyll frontmatter:
   ```yaml
@@ -103,6 +108,7 @@ Key research angles:
 
 | Document | Research Question | Key Files to Explore |
 |----------|------------------|---------------------|
+| Project overview & background | What is this project? Why does it exist? Who uses it? How does it compare to alternatives? What are its core ideas? | README, project homepage, intro/design docs, comparable projects |
 | Architecture overview | What are the layers? How do they connect? | Entry points, engine core, main classes |
 | Code structure | How is the code organized? Build system? | Top-level directories, CMake/setup.py, C++/Rust code |
 | Initialization flow | What happens from entry to ready? | Engine __init__, worker creation, config parsing |
